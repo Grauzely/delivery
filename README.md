@@ -1,4 +1,6 @@
-# delivery
+# Delivery Web App
+
+Aplicativo web de delivery de comida desenvolvido em Vuejs.
 
 ## Project setup
 ```
