@@ -1,10 +1,12 @@
 <template>
   <v-app>
     <v-container v-show="!user.user._id" class="container-top" fluid
-      ><img class="image-perfil" src="../assets/avatar.png" />
-      <v-btn text class="btn-alterar-image" @click="onUpload"
-        >Carregar foto</v-btn
-      >
+      ><img v-if="!picture" class="image-perfil" src="../assets/avatar.png" />
+      <img v-if="picture" class="image-perfil" :src="picture" />
+      <label text class="btn-alterar-image">
+        <input type="file" @change="previewImage" accept="image/*" />
+        Carregar foto
+      </label>
     </v-container>
     <v-card
       width="600"
@@ -52,22 +54,23 @@
     </v-card>
     <v-container v-show="user.user._id" class="container-top" fluid
       ><img
-        v-show="user.user.url_image"
+        v-show="user.user.url_image && !picture"
         class="image-perfil"
         :src="user.user.url_image"
       />
       <img
-        v-show="!user.user.url_image && !picture"
+        v-if="!user.user.url_image && !picture"
         class="image-perfil"
         src="../assets/avatar.png"
       />
 
-      <img v-show="picture" class="image-perfil" :src="picture" />
+      <img v-if="picture" class="image-perfil" :src="picture" />
 
-      <input type="file" @change="previewImage" accept="image/*" />
-      <v-btn text class="btn-alterar-image" @click="onUpload"
-        >Alterar foto</v-btn
-      >
+      <label text class="btn-alterar-image">
+        <input type="file" @change="previewImage" accept="image/*" />
+        Alterar foto
+      </label>
+
       <h1 class="subtitulo" color="#3e243e">
         {{ user.user.name }}
       </h1>
@@ -84,64 +87,75 @@
             </h1>
             <v-card-text class="card-text-dados">
               <v-form>
-                <v-text-field
-                  label="Nome Completo"
-                  color="#8B8B8B"
-                  v-model="user.user.name"
-                  append-icon="mdi-lock"
-                />
-                <v-text-field
-                  label="Email"
-                  color="#8B8B8B"
-                  v-model="user.user.email"
-                  append-icon="mdi-lock"
-                />
-                <v-text-field
-                  label="Telefone"
-                  color="#8B8B8B"
-                  v-mask="'(##) #####-####'"
-                  v-model="user.user.phone"
-                  append-icon="mdi-lock"
-                />
+                <v-row>
+                  <v-text-field
+                    label="Nome Completo"
+                    color="#8B8B8B"
+                    v-model="user.user.name"
+                    :disabled="disabledName ? false : true"
+                  />
+                  <v-btn
+                    class="btnDisabled"
+                    @click="disabledName = !disabledName"
+                    ><v-icon>{{
+                      disabledName ? 'mdi-lock-open' : 'mdi-lock'
+                    }}</v-icon></v-btn
+                  >
+                </v-row>
+                <v-row>
+                  <v-text-field
+                    label="Email"
+                    color="#8B8B8B"
+                    v-model="user.user.email"
+                    :disabled="disabledEmail ? false : true"
+                  />
+                  <v-btn
+                    class="btnDisabled"
+                    @click="disabledEmail = !disabledEmail"
+                    ><v-icon>{{
+                      disabledEmail ? 'mdi-lock-open' : 'mdi-lock'
+                    }}</v-icon></v-btn
+                  >
+                </v-row>
+                <v-row>
+                  <v-text-field
+                    label="Telefone"
+                    color="#8B8B8B"
+                    v-mask="'(##) #####-####'"
+                    v-model="user.user.phone"
+                    :disabled="disabledPhone ? false : true"
+                  />
+                  <v-btn
+                    class="btnDisabled"
+                    @click="disabledPhone = !disabledPhone"
+                    ><v-icon>{{
+                      disabledPhone ? 'mdi-lock-open' : 'mdi-lock'
+                    }}</v-icon></v-btn
+                  >
+                </v-row>
               </v-form>
             </v-card-text>
             <v-card-actions class="btn-alterar">
-              <v-btn class="btnDefault" @click="updateUser">Alterar</v-btn>
+              <v-btn class="btnDefault" @click="updateUser">
+                <span v-show="!process">Salvar</span>
+                <v-progress-circular
+                  v-show="process"
+                  indeterminate
+                  color="white"
+                ></v-progress-circular>
+              </v-btn>
             </v-card-actions>
+            <v-alert v-show="sucess" dismissible dense text type="success">
+              {{ msgUpdate }}
+            </v-alert>
+            <v-alert v-show="error" dismissible dense text type="error">
+              {{ msgUpdate }}
+            </v-alert>
           </v-card>
         </v-col>
         <v-col class="col-dados-pessoais" cols="12" md="6">
           <v-card class="card-dados-pessoais">
-            <h1 class="subtitulo" color="#3e243e">
-              Trocar senha
-            </h1>
             <v-card-text class="card-text-dados">
-              <v-row>
-                <v-col class="col-text-update-senha" cols="9" md="10">
-                  <v-form>
-                    <v-text-field
-                      label="Senha atual"
-                      color="#8B8B8B"
-                      append-icon="mdi-lock"
-                    />
-                    <v-text-field
-                      label="Nova senha"
-                      color="#8B8B8B"
-                      append-icon="mdi-lock"
-                    />
-                    <v-text-field
-                      label="Confirmar senha"
-                      color="#8B8B8B"
-                      append-icon="mdi-lock"
-                    />
-                  </v-form>
-                </v-col>
-                <v-col class="col-btn-update-senha" cols="3" md="2">
-                  <v-btn class="btn-update-senha">
-                    <v-icon>mdi-sync</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
               <v-card class="card-pedido">
                 <v-row justify="space-between">
                   <v-col class="col-icon-help" cols="3" md="2">
@@ -232,6 +246,13 @@ export default {
       imageData: null,
       picture: null,
       uploadValue: 0,
+      process: false,
+      sucess: false,
+      error: false,
+      msgUpdate: null,
+      disabledName: false,
+      disabledEmail: false,
+      disabledPhone: false,
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -244,41 +265,83 @@ export default {
       })
     },
     updateUser() {
-      if (this.user.user.name && this.user.user.email && this.user.user.phone) {
-        console.log('entrou')
+      this.process = true
+      if (this.imageData) {
+        const storageRef = firebase
+          .storage()
+          .ref(`${this.imageData.name}`)
+          .put(this.imageData)
+        storageRef.on(
+          `state_changed`,
+          snapshot => {
+            this.uploadValue =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          },
+          error => {
+            console.log(error.message)
+          },
+          () => {
+            this.uploadValue = 100
+            storageRef.snapshot.ref.getDownloadURL().then(url => {
+              console.log(url)
+              this.picture = url
+              if (
+                this.user.user.name &&
+                this.user.user.email &&
+                this.user.user.phone
+              ) {
+                this.user.user.phone = parseInt(
+                  this.user.user.phone.replace(/[^\d]+/g, ''),
+                )
+                if (this.picture) this.user.user.url_image = this.picture
+                store
+                  .dispatch('user/updateUser', this.user.user)
+                  .then(() => {
+                    this.process = false
+                    this.sucess = true
+                    this.error = false
+                    this.msgUpdate = 'Dados atualizados com sucesso!'
+                  })
+                  .catch(error => {
+                    console.log('Error = ' + error)
+                    this.sucess = false
+                    this.error = true
+                    this.msgUpdate =
+                      'Ops, ocorreu um erro, por favor tente novamente!'
+                  })
+              }
+            })
+          },
+        )
+      } else if (
+        this.user.user.name &&
+        this.user.user.email &&
+        this.user.user.phone
+      ) {
         this.user.user.phone = parseInt(
           this.user.user.phone.replace(/[^\d]+/g, ''),
         )
-        store.dispatch('user/updateUser', this.user.user)
+        if (this.picture) this.user.user.url_image = this.picture
+        store
+          .dispatch('user/updateUser', this.user.user)
+          .then(() => {
+            this.process = false
+            this.sucess = true
+            this.error = false
+            this.msgUpdate = 'Dados atualizados com sucesso!'
+          })
+          .catch(error => {
+            console.log('Error = ' + error)
+            this.sucess = false
+            this.error = true
+            this.msgUpdate = 'Ops, ocorreu um erro, por favor tente novamente!'
+          })
       }
     },
     previewImage(event) {
       this.uploadValue = 0
-      this.picture = null
       this.imageData = event.target.files[0]
-    },
-    onUpload() {
-      this.picture = null
-      const storageRef = firebase
-        .storage()
-        .ref(`${this.imageData.name}`)
-        .put(this.imageData)
-      storageRef.on(
-        `state_changed`,
-        snapshot => {
-          this.uploadValue =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        },
-        error => {
-          console.log(error.message)
-        },
-        () => {
-          this.uploadValue = 100
-          storageRef.snapshot.ref.getDownloadURL().then(url => {
-            this.picture = url
-          })
-        },
-      )
+      this.picture = URL.createObjectURL(this.imageData)
     },
   },
   computed: {
@@ -298,6 +361,14 @@ export default {
   background-image: url(../assets/wave.svg);
   background-size: cover;
   background-position: center;
+}
+
+.input-file {
+  margin: 10px;
+}
+
+input[type='file'] {
+  display: none;
 }
 
 .card-sing-up .v-card__subtitle,
@@ -335,6 +406,7 @@ export default {
   text-transform: capitalize;
   text-decoration: underline;
   font-weight: 700;
+  margin: 10px 0;
 }
 
 .col-dados-pessoais {
@@ -364,11 +436,12 @@ export default {
   flex-direction: column;
 }
 
-.btn-update-senha {
-  height: 100% !important;
+.btnDisabled {
   background-color: #ffc529 !important;
   box-shadow: 1px 1px 4px #ffc529b3;
   padding: 3px 0px !important;
+  margin-top: 14px;
+  min-width: 35px !important;
 }
 
 .btn-update-senha .v-icon.v-icon {

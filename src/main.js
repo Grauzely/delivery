@@ -6,7 +6,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import DateFilter from '@/filters/date.js'
 import VueMask from 'v-mask'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 Vue.use(VueMask)
 

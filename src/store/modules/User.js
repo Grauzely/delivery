@@ -40,14 +40,9 @@ export const actions = {
     })
   },
   updateUser({ commit }, user) {
-    return UserService.putUser(user._id, user)
-      .then(() => {
-        commit('SET_USER', user)
-        console.log('retornou')
-      })
-      .catch(error => {
-        console.log('Error = ' + error)
-      })
+    return UserService.putUser(user._id, user).then(() => {
+      commit('SET_USER', user)
+    })
   },
   fetchUser({ commit, state }, id) {
     if (!state.user._id) {
