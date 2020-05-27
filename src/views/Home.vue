@@ -2,13 +2,13 @@
   <v-app>
     <v-container class="conteudo" fluid>
       <v-row>
-        <v-col cols="12">
+        <v-col class="col-text-call" cols="12" md="6" lg="6" xl="6">
           <div class="header">
             <h1 class="titulo" color="#3e243e">
               Vamos comer uma deliciosa comida {{ firstName }}?
             </h1>
             <v-spacer></v-spacer>
-            <v-btn class="btnImg" :to="{ name: 'perfil' }" color="#ffc529"
+            <v-btn class="btnImgMob" :to="{ name: 'perfil' }" color="#ffc529"
               ><img
                 v-show="user.user.url_image"
                 class="img-perfil"
@@ -26,9 +26,13 @@
             </v-btn>
           </div>
         </v-col>
-      </v-row>
-      <v-row v-if="!item.itemsPromo.length == 0">
-        <v-col cols="12">
+        <v-col
+          cols="12"
+          md="6"
+          lg="6"
+          xl="6"
+          v-if="!item.itemsPromo.length == 0"
+        >
           <div class="header">
             <v-text-field
               class="search"
@@ -47,14 +51,8 @@
         <v-col cols="12">
           <h1 class="subtitulo" color="#3e243e">
             Promoções
+            <p class="line-promo"></p>
           </h1>
-        </v-col>
-      </v-row>
-
-      <v-row v-show="process">
-        <v-col class="col-loading" cols="12">
-          <v-progress-circular indeterminate color="#ffc529">
-          </v-progress-circular>
         </v-col>
       </v-row>
 
@@ -378,7 +376,7 @@
         <v-icon>mdi-home</v-icon>
       </v-btn>
 
-      <v-btn @click="toEndereco" class="btnEndereco">
+      <v-btn :to="{ name: 'endereco' }" class="btnEndereco">
         <v-icon>mdi-map-marker</v-icon>
       </v-btn>
 
@@ -450,7 +448,6 @@ export default {
       qtd: 1,
       qtdTotalItems: 0,
       selectinCategoryId: 0,
-      process: false,
       itemToAdd: {
         id: null,
         name: null,
@@ -489,10 +486,6 @@ export default {
       store.dispatch('order/addItemOrders', this.itemToAdd)
       this.qtd = 1
     },
-    toEndereco() {
-      this.process = true
-      this.$router.push({ path: 'endereco' })
-    },
   },
   beforeRouteEnter(to, from, next) {
     getUser(to, next)
@@ -519,7 +512,7 @@ export default {
 
 <style>
 .conteudo {
-  padding: 25px 250px 70px 250px;
+  padding: 70px 250px 70px 250px;
 }
 
 .header {
@@ -531,8 +524,23 @@ export default {
   font-size: 18px !important;
 }
 
+.col-text-call {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .subtitulo {
   font-size: 16px !important;
+  display: flex;
+  flex-direction: row;
+}
+
+.line-promo {
+  width: 100%;
+  border-bottom: 2px solid #e2e2e2;
+  margin-bottom: 10px !important;
+  margin-left: 10px;
 }
 
 .subtitulo-promo {
@@ -651,6 +659,15 @@ export default {
   box-shadow: 0px 0px !important;
   min-width: 48px !important;
   padding: 0px !important;
+}
+
+.btnImgMob {
+  border-radius: 10px;
+  height: 48px !important;
+  box-shadow: 0px 0px !important;
+  min-width: 48px !important;
+  padding: 0px !important;
+  display: none;
 }
 
 .img-perfil {
@@ -897,6 +914,7 @@ export default {
 
 .bottomNav {
   bottom: -1px !important;
+  display: none !important;
 }
 
 /*--------------------------------------------------------------
@@ -926,6 +944,16 @@ export default {
   }
   .col-info-itens {
     padding-left: 15px;
+  }
+  .topNav {
+    display: none !important;
+  }
+  .bottomNav {
+    bottom: -1px !important;
+    display: flex !important;
+  }
+  .btnImgMob {
+    display: block;
   }
 }
 </style>
