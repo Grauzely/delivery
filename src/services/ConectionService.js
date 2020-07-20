@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = process.env.API_URL || 'http://localhost:3000/api/'
+const API_URL =
+  process.env.API_URL || 'https://apidelivery.grauztecnologia.com.br/api/'
 
 const apiClient = axios.create({
   baseURL: API_URL,
