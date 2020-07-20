@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-container class="fill-height" fluid>
-      <v-card width="600" class="card mx-auto my-auto">
+      <v-card width="300" class="card mx-auto my-auto">
         <v-row>
-          <v-col xs="12" sm="12" md="6" lg="6" xl="6">
+          <v-col xs="12" sm="12" md="12" lg="12" xl="12">
             <v-card-title class="cardTitle">
               <h1 class="mx-auto" color="#3e243e">Delivery Food</h1>
               <img class="mx-auto" src="../assets/food_logo.png" />
             </v-card-title>
           </v-col>
-          <v-col xs="12" sm="12" md="6" lg="6" xl="6">
+          <v-col xs="12" sm="12" md="12" lg="12" xl="12">
             <v-tabs v-model="tab" color="#000" centered>
               <v-tabs-slider color="#ffc529"></v-tabs-slider>
               <v-tab class="tabs" href="#tab-1">
