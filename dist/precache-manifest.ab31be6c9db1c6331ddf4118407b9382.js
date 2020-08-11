@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/wave2.718c4aee.svg"
   },
   {
-    "revision": "9205336d5ff497c8e7156405cf51b9fe",
+    "revision": "53fe4c899065506de60b08a39bde64b0",
     "url": "/index.html"
   },
   {
@@ -48,7 +48,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors.39dfa2e1.js"
   },
   {
-    "revision": "82202de7af568923c79bcfff3c21bd24",
+    "revision": "b2f4ba339eda2323fba87f06e268d078",
+    "url": "/logo.png"
+  },
+  {
+    "revision": "4104e72361af8e153dfddec818757aeb",
     "url": "/manifest.json"
   },
   {
