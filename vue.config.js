@@ -12,8 +12,6 @@ module.exports = {
       theme_color: '#FFFCBB',
       background_color: '#FFFCBB',
       start_url: 'index.html',
-      display: 'standalone',
-      orientation: 'portrait',
       icons: [
         {
           src: './logo.png',
